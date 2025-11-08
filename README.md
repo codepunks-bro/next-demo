@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Next Travel Lab — Next.js 16 & React 19 Showcase
 
-## Getting Started
+Демо-проект, который демонстрирует ключевые новинки Next.js 16 и React 19: PPR, Server Actions, параллельные маршруты, React `use()` и обновлённые transitions.
 
-First, run the development server:
+### Стэк
+
+- Next.js 16.0.1 (App Router, PPR, параллельные маршруты)
+- React 19.2 (`useActionState`, `use()`, transitions)
+- Tailwind CSS 4, TypeScript 5, Turbopack
+- Vitest + Testing Library, Playwright (готовый сетап)
+
+### Быстрый старт
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Основные команды:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Скрипт                               | Назначение                                              |
+| ------------------------------------ | ------------------------------------------------------- |
+| `npm run dev:turbopack`              | Dev-сервер на Turbopack                                 |
+| `npm run build:turbopack`            | Прод-сборка Turbopack                                   |
+| `npm run lint` / `npm run typecheck` | Статический анализ                                      |
+| `npm run test:unit`                  | Vitest тесты                                            |
+| `npm run test:e2e`                   | Playwright (запускает dev-сервер автоматически)         |
+| `npm run analyze:lighthouse`         | Генерация отчёта Lighthouse (`.lighthouse/report.json`) |
+| `npm run analyze:rum`                | Чтение отчёта Lighthouse и вывод Web Vitals             |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Карта демо
 
-## Learn More
+- `/` — Landing с PPR, streaming и A/B вариантами (middleware + параллельный маршрут `@insights`).
+- `/experiences` — Каталог на Server Components с параллельными сегментами `@filters`/`@catalog`, `unstable_cache` и revalidateTag.
+- `/ai-concierge` — Чат на Server Actions (`useActionState`, optimistic UI).
+- `/admin` — Admin Suite с CRUD, `useOptimistic`, revalidatePath/revalidateTag.
+- `/tech-playground` — интерактивные демо React 19 (View Transitions, `use()`).
+- `POST /api/admin/revalidate` — webhook для программной инвалидации каталога.
 
-To learn more about Next.js, take a look at the following resources:
+### Документация
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `PLAN.md` — стратегический план фич.
+- `EXECUTION.md` — чек-лист выполнения (обновляется по мере прогресса).
+- `docs/feature-checklist.md` — сводка релизных фич и UX-персонажей.
+- `docs/demo-script.md` — сценарий живой демонстрации.
+- `docs/monitoring.md` — инструкции по метрикам, Lighthouse и RUM.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### CI
 
-## Deploy on Vercel
+GitHub Actions workflow (`.github/workflows/ci.yml`) выполняет lint, typecheck и unit-тесты на любом push/PR в `main`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Deploy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Проект готов к деплою на Vercel. Перед публикацией выполните:
+
+```bash
+npm run lint
+npm run typecheck
+npm run test:unit
+npm run build
+```
+
+Далее используйте `vercel deploy` или веб-интерфейс Vercel.

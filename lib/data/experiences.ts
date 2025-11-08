@@ -1,4 +1,4 @@
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import type { TravelPersona } from "@/lib/state/travel-profile";
 
 export type ExperienceFilter = {
@@ -257,12 +257,22 @@ const DATASET: Record<TravelPersona, PersonaDataset> = {
 const wait = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms)).then(() => undefined);
 
-export const getExperienceFilters = cache(async (persona: TravelPersona) => {
-  await wait(500);
-  return DATASET[persona].filters;
-});
+export const getExperienceFilters = async (persona: TravelPersona) =>
+  unstable_cache(
+    async () => {
+      await wait(500);
+      return DATASET[persona].filters;
+    },
+    ["experience-filters", persona],
+    { tags: [`experience-filters:${persona}`], revalidate: 120 },
+  )();
 
-export const getExperienceCatalog = cache(async (persona: TravelPersona) => {
-  await wait(1100);
-  return DATASET[persona].experiences;
-});
+export const getExperienceCatalog = async (persona: TravelPersona) =>
+  unstable_cache(
+    async () => {
+      await wait(1100);
+      return DATASET[persona].experiences;
+    },
+    ["experience-catalog", persona],
+    { tags: [`experience-catalog:${persona}`], revalidate: 120 },
+  )();

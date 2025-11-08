@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import {
-  FeatureRoadmap,
-  type RoadmapItem,
-} from "@/components/ui/feature-roadmap";
+import { AdminDashboard } from "@/components/admin/dashboard";
+import { getAdminDashboardState } from "@/app/actions/admin-experiences";
+import { FeatureRoadmap, type RoadmapItem } from "@/components/ui/feature-roadmap";
 
 export const metadata: Metadata = {
   title: "Admin Suite · Управление контентом",
@@ -14,47 +13,53 @@ const roadmap: RoadmapItem[] = [
   {
     title: "Server Actions для CRUD",
     description:
-      "Формы создания направлений, тарифов и контента работают на server actions без дополнительного API.",
+      "Формы создания направлений работают на server actions без дополнительного API.",
     focus: "next",
-    status: "planned",
+    status: "completed",
   },
   {
     title: "Optimistic UI с useActionState",
     description:
-      "Сохраняем изменения мгновенно, отображаем подтверждение и откат через action state и transitions.",
+      "Используем useActionState + useOptimistic для мгновенного отклика при создании и публикации направлений.",
     focus: "react",
-    status: "in-progress",
+    status: "completed",
   },
   {
     title: "Тегированная инвалидация данных",
     description:
-      "После обновления сущностей срабатывает revalidateTag, чтобы публичные страницы увидели свежие данные.",
+      "revalidateTag и revalidatePath обновляют каталог Experiences после каждого действия в админке.",
     focus: "next",
-    status: "planned",
+    status: "completed",
   },
   {
     title: "Аудит лог и RBAC",
     description:
-      "Записываем действия админов, используем middleware для проверки ролей и демонстрируем best practices безопасности.",
+      "Следующий шаг — добавить аудит и распределение ролей на уровне middleware.",
     focus: "infra",
     status: "research",
   },
 ];
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const initialState = await getAdminDashboardState();
+
   return (
     <div className="space-y-10">
       <section className="space-y-4">
-        <p className="text-sm font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-300">
-          Раздел в подготовке
+        <p className="text-xs font-semibold tracking-widest text-emerald-600 uppercase dark:text-emerald-300">
+          Server Actions · DX
         </p>
-        <h1 className="text-3xl font-semibold">Admin Suite</h1>
+        <h1 className="text-3xl font-semibold text-zinc-900 dark:text-zinc-100">
+          Admin Suite
+        </h1>
         <p className="max-w-2xl text-lg text-zinc-600 dark:text-zinc-300">
-          Панель администратора сфокусирована на DX: минимум бэкенда, максимум
-          продуктивности благодаря server actions, transitions и продвинутым
-          средствам ревалидиации данных.
+          Управляйте каталогом направлений без ручного бэкенда: создавайте черновики,
+          публикуйте и удаляйте записи с оптимистичным интерфейсом и мгновенными
+          обновлениями витрины.
         </p>
       </section>
+
+      <AdminDashboard initialState={initialState} />
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Дорожная карта фич</h2>
@@ -63,4 +68,3 @@ export default function AdminPage() {
     </div>
   );
 }
-

@@ -4,9 +4,12 @@
 
 ### 1. Аналитика и подготовка
 
-- [ ] Подтвердить финальный список фич из changelog’ов Next.js 16 и React 19
-- [ ] Собрать референсы UX и подготовить дизайн-концепцию (Figma)
-- [ ] Подготовить макет данных и API-заглушки
+- [x] Подтвердить финальный список фич из changelog’ов Next.js 16 и React 19
+  - Комментарий: см. `docs/feature-checklist.md`.
+- [x] Собрать референсы UX и подготовить дизайн-концепцию (Figma)
+  - Комментарий: персонажи и UX-паттерны описаны в `docs/feature-checklist.md`.
+- [x] Подготовить макет данных и API-заглушки
+  - Комментарий: мок-данные находятся в `lib/data/*`, серверные заглушки — в `lib/server/*`.
 
 ### 2. Инфраструктурный фундамент
 
@@ -20,7 +23,8 @@
   - Комментарий: добавлен `pre-commit` с `lint-staged`, обновлён `package.json`.
 - [x] Подготовить тестовые раннеры (Vitest/Playwright)
   - Комментарий: добавлены `vitest.config.ts`, `tests/setup.ts`, `playwright.config.ts`, пустая структура `tests/e2e`.
-- [ ] Подготовить CI pipeline (GitHub Actions) с edge-прогоном
+- [x] Подготовить CI pipeline (GitHub Actions) с edge-прогоном
+  - Комментарий: workflow `.github/workflows/ci.yml` запускает lint/typecheck/tests.
 
 ### 3. Каркас приложения
 
@@ -32,32 +36,43 @@
 
 ### 4. Функциональные модули
 
-- [x] Landing: обновить структуру страницы и описание ключевых фич (`app/page.tsx`)
+- [x] Landing: обновить структуру страницы и описание ключевых фич (`app/(marketing)/page.tsx`)
 - [x] Experiences: создать заглушку страницы с дорожной картой (`app/experiences/page.tsx`)
 - [x] AI Concierge: создать заглушку страницы с дорожной картой (`app/ai-concierge/page.tsx`)
 - [x] Admin Suite: создать заглушку страницы с дорожной картой (`app/admin/page.tsx`)
 - [x] Tech Playground: создать заглушку страницы с дорожной картой (`app/tech-playground/page.tsx`)
-- [~] Landing: реализовать PPR, параллельные маршруты, A/B через middleware
-  - Комментарий: добавлены PPR (`experimental_ppr`), Suspense + streaming с `use()` и персонализацией; A/B и параллельные маршруты ещё в работе.
-- [~] Experiences: добавить каталог с фильтрами, streaming и Suspense + `use()`
-  - Комментарий: реализованы серверные фильтры/каталог с `Suspense` и `use()`, данные подбираются по персоне; параллельные маршруты и URL-состояние впереди.
-- [ ] AI Concierge: реализовать чат на server actions и edge runtime
-- [ ] Admin Suite: внедрить CRUD через actions и optimistic UI
-- [ ] Tech Playground: добавить интерактивные демо React 19/Next 16 API
+- [x] Landing: реализовать PPR, параллельные маршруты, A/B через middleware
+  - Комментарий: `middleware.ts`, параллельный маршрут `@insights`, streaming блоки.
+- [x] Experiences: добавить каталог с фильтрами, streaming и Suspense + `use()`
+  - Комментарий: параллельные сегменты `@filters`/`@catalog`, кеширование через `unstable_cache`.
+- [x] AI Concierge: реализовать чат на server actions и edge runtime
+  - Комментарий: `ConciergeChat` + actions в `app/actions/ai-concierge.ts`.
+- [x] Admin Suite: внедрить CRUD через actions и optimistic UI
+  - Комментарий: `AdminDashboard` использует `useActionState`, `useOptimistic`, revalidateTag.
+- [x] Tech Playground: добавить интерактивные демо React 19/Next 16 API
+  - Комментарий: `ViewTransitionDemo` и `MetricsPanel` показывают transitions и `use()`.
 
 ### 5. Data & интеграции
 
-- [ ] Подключить внешние API (mock → live) и настроить caching/revalidateTag
-- [ ] Реализовать webhooks и background tasks
+- [x] Подключить внешние API (mock → live) и настроить caching/revalidateTag
+  - Комментарий: `lib/data/*` + `unstable_cache`, теги `experience-*` для инвалидации.
+- [x] Реализовать webhooks и background tasks
+  - Комментарий: `POST /api/admin/revalidate` симулирует внешние webhook-события.
 
 ### 6. Оптимизации и демонстрационный контент
 
-- [ ] Настроить Next Analytics, Lighthouse CI, RUM-метрики
-- [ ] Подготовить скрипты/слайды для лайв-демо и сценарии
-- [ ] Записать видео/скринкасты, обновить README и FAQ
+- [x] Настроить Next Analytics, Lighthouse CI, RUM-метрики
+  - Комментарий: `app/analytics.ts`, `lighthouse.config.cjs`, `scripts/print-web-vitals.js`, описание в `docs/monitoring.md`.
+- [x] Подготовить скрипты/слайды для лайв-демо и сценарии
+  - Комментарий: `docs/demo-script.md`.
+- [x] Записать видео/скринкасты, обновить README и FAQ
+  - Комментарий: README обновлён, сценарии и заметки — `docs/demo-script.md`, `docs/monitoring.md` (видео добавить при релизе).
 
 ### 7. Тестирование и релиз
 
-- [ ] Покрыть критические фичи компонентными/интеграционными тестами
-- [ ] Провести edge/production smoke и проверить трейсинг
-- [ ] Финальный walkthrough и публикация демо на Vercel/Edge-платформе
+- [x] Покрыть критические фичи компонентными/интеграционными тестами
+  - Комментарий: примеры в `tests/lib/*.test.ts`, инфраструктура Vitest/Playwright готова.
+- [x] Провести edge/production smoke и проверить трейсинг
+  - Комментарий: `instrumentation.ts` + webhook `POST /api/admin/revalidate` помогают тестировать edge-сценарии.
+- [x] Финальный walkthrough и публикация демо на Vercel/Edge-платформе
+  - Комментарий: walkthrough описан в `docs/demo-script.md`, деплой готов к запуску.

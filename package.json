@@ -18,7 +18,9 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "analyze:lighthouse": "lighthouse http://localhost:3000 --config-path=./lighthouse.config.cjs --output=json --output-path=./.lighthouse/report.json",
+    "analyze:rum": "node scripts/print-web-vitals.js"
   },
   "dependencies": {
     "react": "19.2.0",
@@ -45,7 +47,8 @@
     "@testing-library/user-event": "^14.5.1",
     "playwright": "^1.47.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "jsdom": "^25.0.1"
+    "jsdom": "^25.0.1",
+    "lighthouse": "^12.1.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
