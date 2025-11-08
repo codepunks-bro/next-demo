@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+echo "→ husky: running lint-staged"
+npx lint-staged
+

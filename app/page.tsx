@@ -1,22 +1,38 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { mainNavigation } from "@/config/navigation";
+import { TravelPersonaSelector } from "@/components/landing/travel-persona-selector";
+import { PersonalizedHighlight } from "@/components/landing/personalized-highlight";
+import {
+  ExperiencesSkeleton,
+  HighlightSkeleton,
+} from "@/components/landing/loading-skeleton";
+import { FeaturedExperiences } from "@/components/landing/featured-experiences";
+import { readTravelProfile } from "@/lib/server/travel-profile";
+import { getFeaturedExperiences, getPersonaHighlight } from "@/lib/data/landing";
 
-export default function Home() {
+export const revalidate = 60;
+export const experimental_ppr = true;
+
+export default async function Home() {
+  const profile = await readTravelProfile();
+  const highlightPromise = getPersonaHighlight(profile.persona);
+  const experiencesPromise = getFeaturedExperiences(profile.persona);
+
   return (
     <div className="space-y-12">
       <section className="grid gap-6 rounded-3xl border border-zinc-200/60 bg-white/80 p-10 shadow-xl shadow-sky-100/40 backdrop-blur dark:border-zinc-800/60 dark:bg-zinc-950/80">
-        <span className="inline-flex max-w-max items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-sky-700 shadow ring-1 ring-sky-200 dark:bg-zinc-900 dark:text-sky-300 dark:ring-sky-400/40">
+        <span className="inline-flex max-w-max items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold tracking-widest text-sky-700 uppercase shadow ring-1 ring-sky-200 dark:bg-zinc-900 dark:text-sky-300 dark:ring-sky-400/40">
           Next.js 16 · React 19 Showcase
         </span>
-        <h1 className="text-3xl font-semibold leading-tight sm:text-4xl">
-          Next Travel Lab — продуктовая витрина, которая демонстрирует все
-          главные новинки Next.js 16 и React 19 на реальном сценарии.
+        <h1 className="text-3xl leading-tight font-semibold sm:text-4xl">
+          Next Travel Lab — продуктовая витрина, которая демонстрирует все главные новинки
+          Next.js 16 и React 19 на реальном сценарии.
         </h1>
         <p className="max-w-2xl text-lg text-zinc-600 dark:text-zinc-300">
-          Мы строим платформу бронирования с AI-консьержем, параллельными
-          маршрутами, частичным предварительным рендерингом и богатым
-          инструментарием разработчика. Переходите в разделы ниже, чтобы увидеть
-          каждую фичу в действии.
+          Мы строим платформу бронирования с AI-консьержем, параллельными маршрутами,
+          частичным предварительным рендерингом и богатым инструментарием разработчика.
+          Переходите в разделы ниже, чтобы увидеть каждую фичу в действии.
         </p>
         <div className="flex flex-wrap gap-3">
           {mainNavigation.slice(1).map((item) => (
@@ -61,6 +77,24 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <Suspense fallback={<HighlightSkeleton />}>
+        <PersonalizedHighlight data={highlightPromise} />
+      </Suspense>
+
+      <section className="grid gap-6">
+        <h2 className="text-2xl font-semibold">Персонализация экспириенса в один клик</h2>
+        <p className="max-w-2xl text-sm text-zinc-600 dark:text-zinc-300">
+          Попробуйте выбрать сценарий путешественника — мы будем сохранять предпочтения с
+          помощью Server Actions, cookies и контекста React 19. В следующих разделах
+          рекомендации, цены и AI-подборки подстроятся под выбранную персону.
+        </p>
+        <TravelPersonaSelector />
+      </section>
+
+      <Suspense fallback={<ExperiencesSkeleton />}>
+        <FeaturedExperiences data={experiencesPromise} />
+      </Suspense>
     </div>
   );
 }

@@ -1,7 +1,9 @@
+import type { Route } from "next";
+
 export type MainNavItem = {
   label: string;
   description: string;
-  href: string;
+  href: Route;
   badge?: string;
 };
 
@@ -37,4 +39,3 @@ export const mainNavigation: MainNavItem[] = [
     badge: "Playground",
   },
 ];
-
