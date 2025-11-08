@@ -1,65 +1,66 @@
-import Image from "next/image";
+import Link from "next/link";
+import { mainNavigation } from "@/config/navigation";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="space-y-12">
+      <section className="grid gap-6 rounded-3xl border border-zinc-200/60 bg-white/80 p-10 shadow-xl shadow-sky-100/40 backdrop-blur dark:border-zinc-800/60 dark:bg-zinc-950/80">
+        <span className="inline-flex max-w-max items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-sky-700 shadow ring-1 ring-sky-200 dark:bg-zinc-900 dark:text-sky-300 dark:ring-sky-400/40">
+          Next.js 16 · React 19 Showcase
+        </span>
+        <h1 className="text-3xl font-semibold leading-tight sm:text-4xl">
+          Next Travel Lab — продуктовая витрина, которая демонстрирует все
+          главные новинки Next.js 16 и React 19 на реальном сценарии.
+        </h1>
+        <p className="max-w-2xl text-lg text-zinc-600 dark:text-zinc-300">
+          Мы строим платформу бронирования с AI-консьержем, параллельными
+          маршрутами, частичным предварительным рендерингом и богатым
+          инструментарием разработчика. Переходите в разделы ниже, чтобы увидеть
+          каждую фичу в действии.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          {mainNavigation.slice(1).map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white/80 px-5 py-2 text-sm font-medium text-sky-700 transition hover:-translate-y-0.5 hover:bg-white hover:text-sky-900 hover:shadow dark:border-sky-400/40 dark:bg-zinc-900/80 dark:text-sky-300 dark:hover:border-sky-300"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              {item.label}
+              <span className="text-xs text-zinc-500">→</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="grid gap-6">
+        <h2 className="text-2xl font-semibold">Что планируем показать</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {mainNavigation.map((item) => (
+            <article
+              key={item.href}
+              className="flex flex-col gap-2 rounded-2xl border border-zinc-200/60 bg-white/70 p-6 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800/60 dark:bg-zinc-950/70"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">{item.label}</h3>
+                {item.badge ? (
+                  <span className="inline-flex items-center rounded-full bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-700 dark:bg-sky-500/20 dark:text-sky-200">
+                    {item.badge}
+                  </span>
+                ) : null}
+              </div>
+              <p className="text-sm text-zinc-600 dark:text-zinc-300">
+                {item.description}
+              </p>
+              <Link
+                href={item.href}
+                className="text-sm font-medium text-sky-700 transition hover:text-sky-900 dark:text-sky-300 dark:hover:text-sky-200"
+              >
+                Перейти к разделу →
+              </Link>
+            </article>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </section>
     </div>
   );
 }
